@@ -12,7 +12,7 @@ Este proyecto consiste en el desarrollo de una aplicación web para la gestión 
 
 ### Tareas
 1. **Diseño de la base de datos**:
-   - Crear el modelo entidad-relación para las tablas necesarias: `usuarios`, `habitaciones`, `reservaciones`, `carrito`, `categorías`, etc.
+   - Crear el modelo entidad-relación para las tablas necesarias: `usuarios`, `habitaciones`, etc.
    - Implementar relaciones entre tablas y restricciones según el modelo relacional.
 2. **Implementación de la base de datos**:
    - Crear y configurar las tablas en MariaDB (utilizando XAMPP).
@@ -23,7 +23,6 @@ Este proyecto consiste en el desarrollo de una aplicación web para la gestión 
    - Implementar transacciones para asegurar la consistencia en operaciones críticas, como las reservaciones.
 5. **Mantenimiento**:
    - Optimizar la base de datos para mejorar el rendimiento de las consultas.
-
 
 ---
 ## Servidor
@@ -60,13 +59,11 @@ Este proyecto consiste en el desarrollo de una aplicación web para la gestión 
 ## Cliente
 **Responsables: Integrantes 4, 5 y 6**
 
-### Tareas de Integrante 4: Inicio 
-1. **Validación de formularios**:
-   - Implementar validación de campos en todos los formularios usando JavaScript (por ejemplo, que la contraseña sea mayor a 8 digitos...).
-2. **Confirmación de acciones**:
-   - Implementar ventanas de confirmación antes de realizar cualquier acción importante (por ejemplo, agregar o eliminar del carrito).
-3. **Ventanas emergentes**:
-   - Crear ventanas emergentes que permitan consultar información resumida de cada tipo de habitación.
+### Tareas de `Andry`: Inicio 
+1. **Crear la página de inicio**:
+   - Seguir el prototipo de la página de inicio.
+   - Incluir lo que se pide en el archivo (buscador, secciones, estética, dejar espacio para la lógica de si el usuario es admin, usuario registrado o usuario no registrado).
+
 
 ### Tareas de `Laines`: Admin panel
 1. **Interfaz de usuario para el catálogo de habitaciones**:
@@ -77,18 +74,20 @@ Este proyecto consiste en el desarrollo de una aplicación web para la gestión 
 3. **Manejo del carrito de reservaciones**:
    - Crear la interfaz de usuario para visualizar el carrito de reservaciones, con subtotales y costo total.
 
-### Tareas de `Carlos`: 
-1. **Diseño de la interfaz y usabilidad**:
-   - Diseñar la interfaz gráfica general de la aplicación, asegurando su funcionalidad y estética.
-   - Aplicar una plantilla de diseño para mantener la uniformidad visual en la aplicación.
-2. **Navegación y accesibilidad**:
-   - Crear un sistema de menús desplegables para agrupar opciones de navegación.
-   - Asegurar que los menús principales estén accesibles en todas las páginas.
-3. **Optimización visual y de contenido**:
-   - Implementar una distribución accesible y ordenada de los elementos, uso adecuado de colores, imágenes y corrección de idioma.
+### Tareas de `Carlos` páginas de ingreso y registro:
+1. **Validación de formularios**:
+   - Implementar validación de campos en todos los formularios usando JavaScript (por ejemplo, que la contraseña sea mayor a 8 digitos...).
+2. **Retroalimentación visual en el loggin**:
+   - Devolver feedback visual, por ejemplo "no ingresaste tus datos", o "no existe tu usuario".
+3. **Hazlo bonito, lo más parecido al prototipo**:
+   
 
 ---
-
+...
+2. **Confirmación de acciones**:
+   - Implementar ventanas de confirmación antes de realizar cualquier acción importante (por ejemplo, agregar o eliminar del carrito).
+3. **Ventanas emergentes**:
+   - Crear ventanas emergentes que permitan consultar información resumida de cada tipo de habitación.
 ## Instalación
 
  Clonar el repositorio.
