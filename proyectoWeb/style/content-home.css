@@ -1,0 +1,40 @@
+
+.inicio {
+    
+    padding: 20px;
+    background-color: #ffffe1;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    position: relative;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.slider{
+    background-image: url(../img/example.webp);
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+
+
+}
+
+.slider-image{
+    background-color: #000;
+    object-fit: cover;
+    
+}
+
+
+.contenido{
+    color: #000;
+
+    background-color: #fffddd;
+}

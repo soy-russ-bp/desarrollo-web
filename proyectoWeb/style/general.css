@@ -1,0 +1,142 @@
+html {
+	scroll-behavior: smooth;
+}
+
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+body {
+	background: #f2f2f2;
+	font-family: 'Roboto', sans-serif;
+}
+
+a {
+	text-decoration: none;
+}
+
+
+.seccion .card {
+    padding: 10px;
+	width: 100%;
+    height: 80%;
+	border-radius: 5px;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+/* Estilos para los enlaces de navegación */
+.navbar a {
+	
+	color: white;
+	text-decoration: none;
+}
+
+
+/* Efecto hover */
+form button:hover {
+    transform: scale(1.09); /* Aumentar tamaño */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
+}
+
+/* Pseudo-elemento para efecto de pulso */
+form button::before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%; /* Más grande que el botón */
+    height: 300%; /* Más grande que el botón */
+    background: rgba(0, 73, 55, 0.2); /* Fondo semitransparente */
+    border-radius: 50%; /* Borde redondeado */
+    transform: translate(-50%, -50%) scale(0); /* Oculto inicialmente */
+    transition: transform 1.8s ease; /* Transición para el pulso */
+}
+
+/* Efecto de pulso al hacer hover */
+form button:hover::before {
+    transform: translate(-50%, -50%) scale(1); /* Mostrar el efecto de pulso */
+}
+
+.custom-select {
+    position: relative;
+    width:20%;
+    margin: 20px 0;
+}
+
+form select {
+
+    width: 60%;
+	height: 30%;
+    padding: 12px 20px;
+    border: 2px solid #ccc; /* Borde gris claro */
+    border-radius: 25px; /* Bordes redondeados */
+    background-color: #fff; /* Fondo blanco */
+    color: #333; /* Color de texto gris oscuro */
+    font-size: 16px; /* Tamaño de fuente */
+    cursor: pointer; /* Cursor en forma de mano */
+    appearance: none; /* Ocultar el icono de flecha por defecto */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* Transiciones suaves */
+}
+
+/* Efecto hover */
+form select:hover {
+    border-color: #5f73e8; /* Cambia el color del borde al pasar el mouse */
+}
+
+/* Efecto focus */
+form select:focus {
+    outline: none; /* Sin contorno */
+    border-color: #5f73e8; /* Color de borde al hacer foco */
+    box-shadow: 0 0 5px rgba(95, 115, 232, 0.5); /* Sombra ligera */
+}
+
+
+form select:focus {
+    background-color: rgba(95, 115, 232, 0.1); /* Fondo suave al hacer clic */
+    transition: background-color 0.3s ease;
+}
+
+
+
+
+
+
+h1 {
+    font-size: 2.5em;
+    margin: 20px 0;
+}
+
+p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+}
+
+
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    background-color: #109173;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+button:hover {
+    background-color: #0e7a5d;
+    transform: scale(1.05);
+}

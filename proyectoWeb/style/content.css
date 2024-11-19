@@ -1,0 +1,32 @@
+
+.seccion {
+    width: 88%;
+    height: 80vh;
+    margin: auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+}
+
+
+
+
+
+.seccion h1 {
+	font-size: 48px;
+
+}
+
+.seccion p {
+	line-height: 38px;
+	color: #494949;
+	font-size: 20px;
+}
+
+.seccion img {
+	width: 100%;
+	vertical-align: top;
+
+}

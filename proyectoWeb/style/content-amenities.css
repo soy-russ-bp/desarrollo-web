@@ -1,0 +1,48 @@
+
+.amenities {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: #fff;
+}
+
+.amenities h2 {
+    font-size: 2em;
+    color: #333;
+}
+
+.amenity-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.amenity {
+    width: 250px;
+    padding: 20px;
+    background-color: #fffddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.amenity img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.amenity h3 {
+    margin-top: 10px;
+    font-size: 1.5em;
+    color: #00796b;
+}
+
+.amenity p {
+    color: #555;
+}
+
+.amenity:hover {
+    transform: translateY(-10px);
+}
+

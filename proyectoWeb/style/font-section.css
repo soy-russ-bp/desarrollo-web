@@ -1,0 +1,30 @@
+
+.hero {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 70vh;
+		background-image: url('../img/fondo.webp');
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: bottom;
+		background-attachment: fixed;
+		background-origin: padding-box;
+		background-clip: border-box;
+		border-bottom: px solid black;
+		border-radius:0 0 5% 5% ;
+	}
+
+
+
+
+.hero h1 {
+	font-size: 80px;
+}
+
+.hero p {
+	font-size: 30px;
+	text-transform: uppercase;
+	color: #113CFC;
+}

@@ -1,0 +1,89 @@
+nav {
+	background: #fff;
+	height: 80px;
+	box-shadow: rgba(134, 134, 134, 0.2) 0px 8px 24px;
+	display: flex;
+	position: sticky;
+	overflow: hidden;
+}
+
+.carro {
+	display: flex;
+	justify-content: left;
+}
+
+nav a img {
+	position: absolute;
+	margin: 5px 40px 0 0;
+	height: 100%;
+}
+
+.searcher {
+	flex: 3;
+	height: 100%;
+}
+
+nav a {
+	flex: 1;
+	height: 70%;
+	text-transform: uppercase;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	color: #000;
+	transition: .2s ease-in-out all;
+	font-weight: 500;
+}
+
+.indicador {
+	width: 0px;
+	height: 7px;
+	background: #113cfc;
+	position: absolute;
+	bottom: 0;
+	transition: .3s ease-out all;
+}
+
+.navbar {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	position: relative;
+	width: 100%;
+	background-color: rgba(215, 206, 206, 0.4);
+	color: white;
+	font-size: 18px;
+	transition: background-color 0.3s ease;
+	border-bottom: 1.75px solid black;
+}
+
+.navbar a {
+	color: white;
+	text-decoration: none;
+}
+
+form {
+	display: flex;
+	align-items: center;
+	background-color: #fff;
+	border-radius: 5px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	padding: 20px 25px;
+	width: 96%;
+	border-radius: 50px;
+}
+
+form input {
+	border: none;
+	outline: none;
+	padding: 10px;
+	flex-grow: 1;
+	font-size: 16px;
+	color: #333;
+}
+
+form button {
+	border-radius: 50px;
+	background: linear-gradient(90deg, rgb(59, 70, 57) 36%);
+}
