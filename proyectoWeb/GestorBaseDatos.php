@@ -16,9 +16,6 @@ function conectarBD() {
         throw new Exception("Error de conexión: " . mysqli_connect_error());
     }
 
-    if (!mysqli_set_charset($conexion, DB_CHARSET)) {
-        throw new Exception("Error al establecer el conjunto de caracteres: " . mysqli_error($conexion));
-    }
 
     return $conexion;
 }
@@ -62,7 +59,7 @@ function ejecutarConsulta($conexion, $query, $tipos = '', $parametros = []) {
 }
 
 /**
- * Verifica si un dato existe en la base de datos.
+ * Verifica si un dato existe en la base de datos
  *
  * @param mysqli $conexion Conexión a la base de datos.
  * @param string $query Consulta SQL con marcadores de posición (?).
