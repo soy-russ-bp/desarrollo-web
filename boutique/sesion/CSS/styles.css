@@ -1,0 +1,117 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #222;
+    color: #fff;
+}
+
+.background {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    min-height: 100vh;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    padding: 1em;
+}
+
+.form-container {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 350px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    margin-right: 2em;
+}
+
+.form-container h2 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-container label {
+    color: #333;
+    font-weight: bold;
+    font-size: 14px;
+    display: block;
+    margin-top: 10px;
+}
+
+.form-container input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: none;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+}
+
+.form-container button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    background-color: #c79861;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.form-container button:hover {
+    background-color: #b08654;
+}
+
+.form-container .link {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #666;
+    text-decoration: none;
+}
+
+.form-container .link:hover {
+    text-decoration: underline;
+}
+
+/*---------------------------------------------------------
+    Mobile (max-width: 640px)
+    - Formulario en columna, ancho completo del contenedor
+----------------------------------------------------------*/
+@media screen and (max-width: 40em) {
+    .form-container {
+        padding: 15px;
+    }
+}
+
+/*----------------------------------------------------------
+    Tablets (min-width: 640px)
+    - Ajuste de tamaño para mayor legibilidad
+-----------------------------------------------------------*/
+@media screen and (min-width: 40em) and (max-width: 63.99em) {
+    .form-container {
+        max-width: 400px;
+        padding: 20px 30px;
+    }
+}
+
+/*----------------------------------------------------------
+    Large Screens (min-width: 1024px)
+    - Aumenta el tamaño del contenedor para monitores grandes
+-----------------------------------------------------------*/
+@media screen and (min-width: 64em) {
+    .form-container {
+        max-width: 450px;
+        padding: 30px 40px;
+    }
+}

@@ -12,8 +12,8 @@
         </div>
         <nav>
             <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="admin.html">Administración</a></li>
+                <li><a href="../index.php">Inicio</a></li>
+                <li><a href="admin.php">Administración</a></li>
             </ul>
         </nav>
     </header>

@@ -35,10 +35,10 @@
 				<button>Buscar</button>
 			</form>
 		</a>
-        <a class="carro">
+        <a href="carrito/carrito.php" class="carro">
 			<lord-icon src="https://cdn.lordicon.com/ggirntso.json" trigger="hover" style="width: 60%;height:80%;"></lord-icon>
 		</a>
-        <a>
+        <a href="sesion/ingreso.php">
 			<lord-icon src="https://cdn.lordicon.com/kdduutaw.json" trigger="hover" state="hover-looking-around" colors="primary:#121331,secondary:#109173" style="width:70%;height:80%"></lord-icon>
 		</a>
     </nav>
