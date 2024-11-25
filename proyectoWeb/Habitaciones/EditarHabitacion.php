@@ -34,7 +34,7 @@ try {
 
         // Eliminar la imagen anterior si existe
         if ($habitacionActual['imagen']) {
-            $rutaImagenAnterior = __DIR__ . '/../uploads/habitaciones/' . $habitacionActual['imagen'];
+            $rutaImagenAnterior = __DIR__ . '/../recuros/habitaciones/' . $habitacionActual['imagen'];
             if (file_exists($rutaImagenAnterior)) {
                 unlink($rutaImagenAnterior);
             }

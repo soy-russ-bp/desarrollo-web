@@ -257,4 +257,184 @@ function subirImagen($archivo){
     return $nombreUnico;
 }
 
+/**
+ * Crea un nuevo usuario en la base de datos.
+ *
+ * @param mysqli $conexion La conexión a la base de datos.
+ * @param array $datos Asociativo con los datos del usuario.
+ * @return bool Verdadero si se creó correctamente, falso de lo contrario.
+ * @throws Exception Si ocurre un error en la consulta.
+ */
+function crearUsuario($conexion, $datos){
+    $stmt = mysqli_prepare($conexion, "INSERT INTO usuarios (nombre_usuario, contrasena, tipo_usuario, nombre_completo, email) VALUES (?, ?, ?, ?, ?)");
+    if (!$stmt) {
+        throw new Exception("Error en la preparación de la sentencia: " . mysqli_error($conexion));
+    }
+
+    
+
+    mysqli_stmt_bind_param($stmt, "sssss", 
+        $datos['nombre_usuario'], 
+        $datos['contrasena'], 
+        $datos['tipo_usuario'], 
+        $datos['nombre_completo'], 
+        $datos['email']
+    );
+
+    if (!mysqli_stmt_execute($stmt)) {
+        throw new Exception("Error en la ejecución de la sentencia: " . mysqli_stmt_error($stmt));
+    }
+
+    $exito = mysqli_stmt_affected_rows($stmt) > 0;
+
+    mysqli_stmt_close($stmt);
+
+    return $exito;
+}
+
+/**
+ * Obtiene todos los usuarios de la base de datos.
+ *
+ * @param mysqli $conexion La conexión a la base de datos.
+ * @return array Array de usuarios.
+ * @throws Exception Si ocurre un error en la consulta.
+ */
+function listarUsuarios($conexion){
+    $query = "SELECT id_usuario, nombre_usuario, tipo_usuario, nombre_completo, email, fecha_registro FROM usuarios";
+    $resultado = mysqli_query($conexion, $query);
+
+    if (!$resultado) {
+        throw new Exception("Error al listar usuarios: " . mysqli_error($conexion));
+    }
+
+    $usuarios = [];
+    while ($fila = mysqli_fetch_assoc($resultado)) {
+        $usuarios[] = $fila;
+    }
+
+    mysqli_free_result($resultado);
+    return $usuarios;
+}
+
+/**
+ * Obtiene un usuario específico por su ID.
+ *
+ * @param mysqli $conexion La conexión a la base de datos.
+ * @param int $id_usuario ID del usuario.
+ * @return array|null El usuario como array asociativo o null si no se encuentra.
+ * @throws Exception Si ocurre un error en la consulta.
+ */
+function obtenerUsuario($conexion, $id_usuario){
+    $stmt = mysqli_prepare($conexion, "SELECT id_usuario, nombre_usuario, tipo_usuario, nombre_completo, email, fecha_registro FROM usuarios WHERE id_usuario = ?");
+    if (!$stmt) {
+        throw new Exception("Error en la preparación de la sentencia: " . mysqli_error($conexion));
+    }
+
+    mysqli_stmt_bind_param($stmt, "i", $id_usuario);
+
+    if (!mysqli_stmt_execute($stmt)) {
+        throw new Exception("Error en la ejecución de la sentencia: " . mysqli_stmt_error($stmt));
+    }
+
+    $resultado = mysqli_stmt_get_result($stmt);
+    $usuario = mysqli_fetch_assoc($resultado);
+
+    mysqli_stmt_close($stmt);
+
+    return $usuario ? $usuario : null;
+}
+
+/**
+ * Actualiza un usuario en la base de datos.
+ *
+ * @param mysqli $conexion La conexión a la base de datos.
+ * @param int $id_usuario ID del usuario a actualizar.
+ * @param array $datos Asociativo con los datos actualizados.
+ *                     Si 'contrasena' está vacío, no se actualiza.
+ * @return bool Verdadero si se actualizó correctamente, falso de lo contrario.
+ * @throws Exception Si ocurre un error en la consulta.
+ */
+function editarUsuario($conexion, $id_usuario, $datos){
+    if (!empty($datos['contrasena'])) {
+        // Si se actualiza la contraseña
+        $stmt = mysqli_prepare($conexion, "UPDATE usuarios SET nombre_usuario = ?, contrasena = ?, tipo_usuario = ?, nombre_completo = ?, email = ? WHERE id_usuario = ?");
+        if (!$stmt) {
+            throw new Exception("Error en la preparación de la sentencia: " . mysqli_error($conexion));
+        }
+
+        
+
+        mysqli_stmt_bind_param($stmt, "sssssi", 
+            $datos['nombre_usuario'], 
+            $datos['contrasena'], 
+            $datos['tipo_usuario'], 
+            $datos['nombre_completo'], 
+            $datos['email'],
+            $id_usuario
+        );
+    } else {
+        // Si no se actualiza la contraseña
+        $stmt = mysqli_prepare($conexion, "UPDATE usuarios SET nombre_usuario = ?, tipo_usuario = ?, nombre_completo = ?, email = ? WHERE id_usuario = ?");
+        if (!$stmt) {
+            throw new Exception("Error en la preparación de la sentencia: " . mysqli_error($conexion));
+        }
+
+        mysqli_stmt_bind_param($stmt, "ssssi", 
+            $datos['nombre_usuario'], 
+            $datos['tipo_usuario'], 
+            $datos['nombre_completo'], 
+            $datos['email'],
+            $id_usuario
+        );
+    }
+
+    if (!mysqli_stmt_execute($stmt)) {
+        throw new Exception("Error en la ejecución de la sentencia: " . mysqli_stmt_error($stmt));
+    }
+
+    $exito = mysqli_stmt_affected_rows($stmt) > 0;
+
+    mysqli_stmt_close($stmt);
+
+    return $exito;
+}
+
+/**
+ * Elimina un usuario de la base de datos.
+ *
+ * @param mysqli $conexion La conexión a la base de datos.
+ * @param int $id_usuario ID del usuario a eliminar.
+ * @return bool Verdadero si se eliminó correctamente, falso de lo contrario.
+ * @throws Exception Si ocurre un error en la consulta.
+ */
+function eliminarUsuario($conexion, $id_usuario){
+    $stmt = mysqli_prepare($conexion, "DELETE FROM usuarios WHERE id_usuario = ?");
+    if (!$stmt) {
+        throw new Exception("Error en la preparación de la sentencia: " . mysqli_error($conexion));
+    }
+
+    mysqli_stmt_bind_param($stmt, "i", $id_usuario);
+
+    if (!mysqli_stmt_execute($stmt)) {
+        throw new Exception("Error en la ejecución de la sentencia: " . mysqli_stmt_error($stmt));
+    }
+
+    $exito = mysqli_stmt_affected_rows($stmt) > 0;
+
+    mysqli_stmt_close($stmt);
+
+    return $exito;
+}
+
+/**
+ * Validar el tipo de usuario.
+ *
+ * @param string $tipo_usuario Tipo de usuario a validar.
+ * @return bool Verdadero si es válido, falso de lo contrario.
+ */
+function validarTipoUsuario($tipo_usuario){
+    $tiposPermitidos = ['Administrador', 'Huesped'];
+    return in_array($tipo_usuario, $tiposPermitidos);
+}
+
 ?>

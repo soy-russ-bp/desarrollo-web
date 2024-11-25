@@ -2,7 +2,7 @@
 
 
 require_once 'proyectoWeb\GestorBaseDatos.php';
-require_once 'proyectoWeb\config.inc.php';
+require_once 'config.inc.php';
 
 try {
     // Abrir conexión
