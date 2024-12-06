@@ -1,3 +1,21 @@
+(function () {
+    function fetchRoomDetails(roomId) {
+        console.log(`Fetching details for room ID: ${roomId}`);
+        const popup = document.getElementById(`popup-${roomId}`);
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `Habitaciones/ListarHabitaciones.php?id=${roomId}`, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                popup.innerHTML = xhr.responseText;
+            }
+        };
+        xhr.send();
+    }
+
+    // Exponer la función al contexto global
+    window.fetchRoomDetails = fetchRoomDetails;
+})();
+
 const menu = document.getElementById('menu');
 const indicador = document.getElementById('indicador');
 const secciones = document.querySelectorAll('.seccion');
@@ -25,10 +43,17 @@ const observer = new IntersectionObserver((entradas, observer) => {
 });
 
 // Agregamos un observador para el hero.
-observer.observe(document.getElementById('hero'));
+const hero = document.getElementById('hero');
+if (hero) {
+    observer.observe(hero);
+}
 
 // Asignamos un observador a cada una de las secciones
-secciones.forEach(seccion => observer.observe(seccion));
+secciones.forEach(seccion => {
+    if (seccion) {
+        observer.observe(seccion);
+    }
+});
 
 // Evento para cuando la pantalla cambie de tamaño.
 const onResize = () => {
@@ -125,3 +150,4 @@ function exploreHotel() {
     alert("¡Explora más sobre nuestras habitaciones y servicios!");
     // Aquí puedes agregar lógica adicional si deseas
 }
+

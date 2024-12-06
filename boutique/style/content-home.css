@@ -17,9 +17,9 @@
 }
 
 .slider{
-    background-image: url(../img/example.webp);
+    background-image: url(https://cf.bstatic.com/xdata/images/hotel/max1024x768/208038194.jpg?k=8fd5cf6c234bb803d14a39ecca5f53cf11ccbc63fae108dd869ea7d20b4d5758&o=&hp=1);
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
     width: 100%;
     height: 100%;
 

@@ -1,0 +1,527 @@
+/* estilos.css */
+
+/* Estilos generales */
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+/* Encabezado */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: #fff;
+    padding: 15px 20px;
+}
+
+header .logo img {
+    height: 50px;
+}
+
+header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+header nav ul li {
+    margin-left: 15px;
+}
+
+header nav ul li:first-child {
+    margin-left: 0;
+}
+
+header nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+header nav ul li a:hover {
+    text-decoration: underline;
+}
+
+
+/* Contenedor principal */
+main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 20px auto;
+}
+
+/* Sección de productos */
+#productos {
+    flex: 3;
+    padding: 20px;
+}
+
+#productos h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.producto {
+    background-color: #fff;
+    width: 300px;
+    margin: 15px;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.producto:hover {
+    transform: scale(1.03);
+}
+
+.producto img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.producto h3 {
+    margin: 15px 0;
+    color: #007BFF;
+}
+
+.producto p {
+    margin: 10px 0;
+    color: #555;
+}
+
+.producto label {
+    display: block;
+    margin: 15px 0 5px;
+    color: #333;
+}
+
+.producto input[type="number"] {
+    width: 80px;
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.producto button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.producto button:hover {
+    background-color: #218838;
+}
+
+/* Botones específicos */
+.producto .ver-detalles {
+    background-color: #17a2b8;
+}
+
+.producto .ver-detalles:hover {
+    background-color: #117a8b;
+}
+
+/* Sección del carrito */
+#carrito {
+    flex: 1;
+    background-color: #fff;
+    padding: 20px;
+    margin: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#carrito h2 {
+    text-align: center;
+    color: #333;
+}
+
+#lista-carrito {
+    margin-top: 20px;
+}
+
+.item-carrito {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+.item-carrito p {
+    margin: 0 0 10px;
+    color: #555;
+}
+
+.item-carrito input[type="number"] {
+    width: 60px;
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.item-carrito button {
+    padding: 5px 10px;
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.item-carrito button:hover {
+    background-color: #c82333;
+}
+
+.total-carrito {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.total-carrito h3 {
+    margin: 0;
+    color: #333;
+}
+
+#finalizar-compra {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    padding: 15px 0;
+    background-color: #ffc107;
+    color: #333;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#finalizar-compra:hover {
+    background-color: #e0a800;
+}
+
+/* Ventana emergente */
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+#ventana-emergente {
+    background: #fff;
+    padding: 30px;
+    max-width: 600px;
+    width: 90%;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+}
+
+#ventana-emergente h2 {
+    margin-top: 0;
+    color: #007BFF;
+}
+
+#ventana-emergente img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+#ventana-emergente p {
+    margin: 10px 0;
+    color: #555;
+}
+
+#cerrar-ventana {
+    margin-top: 20px;
+    padding: 10px 30px;
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+#cerrar-ventana:hover {
+    background-color: #c82333;
+}
+
+/* Pie de página */
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 15px 0;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* Estilos responsivos */
+@media (max-width: 992px) {
+    main {
+        flex-direction: column;
+    }
+
+    #productos, #carrito {
+        width: 100%;
+    }
+
+    #productos {
+        order: 2;
+    }
+
+    #carrito {
+        order: 1;
+    }
+
+    .producto {
+        width: calc(50% - 30px);
+    }
+}
+
+@media (max-width: 600px) {
+    .producto {
+        width: 100%;
+        margin: 15px 0;
+    }
+
+    header nav ul li {
+        display: block;
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    header nav {
+        float: none;
+        margin: 0;
+    }
+}
+
+/* Estilos para el Panel de Administración */
+#admin-catalogo {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+#admin-catalogo h2 {
+    text-align: center;
+    color: #333;
+}
+
+#admin-catalogo button {
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#admin-catalogo table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#admin-catalogo th, #admin-catalogo td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+#admin-catalogo th {
+    background-color: #f2f2f2;
+}
+
+/* Estilos para el Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-contenido {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 50%;
+    position: relative;
+}
+
+.cerrar-modal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.cerrar-modal:hover,
+.cerrar-modal:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#form-habitacion label {
+    display: block;
+    margin-top: 10px;
+    color: #333;
+}
+
+#form-habitacion input[type="text"],
+#form-habitacion input[type="number"],
+#form-habitacion textarea {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+#form-habitacion button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#form-habitacion button:hover {
+    background-color: #218838;
+}
+
+.titulo-categoria {
+    width: 100%;
+    border-bottom: 2px solid #007BFF;
+    margin-top: 30px;
+    color: #007BFF;
+}
+
+.contenedor-categoria {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.item-carrito {
+    display: flex;
+    flex-direction: column;
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+.item-carrito p {
+    margin: 5px 0;
+    color: #555;
+}
+#pago {
+    padding: 10px;
+    margin: 10px;
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+}
+
+#pago .card-number-container {
+    padding: 10px;
+    margin: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+#pago .card-input {
+    width: 60px;
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#pago input {
+    padding: 10px;
+    margin: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 30%;
+}
+
+#pago label {
+    padding: 10px;
+    margin: 10px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#pago button {
+    padding: 10px;
+    margin: 10px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#pago button:hover {
+    background-color: #0056b3;
+}
+
+#pago .message {
+    padding: 10px;
+    margin: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#pago .error {
+    color: red;
+}
+
+#pago .success {
+    color: green;
+}
