@@ -6,6 +6,7 @@ error_reporting(E_ALL);
 
 //include_once("mantener_sesion.php");
 require_once("../GestorBaseDatos.php");
+require_once("guardar_sesion.php");
 
 $destino = "Location:ingreso.php";
 $tipo_usuario = "";
@@ -14,41 +15,51 @@ $tipo_usuario = "";
 
 
 //función para revisar si el usuario existe en la base de datos:
-function iniciarSesion($email, $password){
+function getUsuario($email) {
     $conexion = abrirConexion();
-    $usuario_encontrado = "SELECT * FROM usuarios WHERE email = '$email' AND contrasena = '$password'";
-    $resultado = mysqli_query($conexion,$usuario_encontrado);
-    $usuario = mysqli_fetch_assoc($resultado); //regresa un arreglo asociativo con los datos del usuario
+    $usuario_encontrado = "SELECT * FROM usuarios WHERE email = '$email'";
+    $resultado = mysqli_query($conexion, $usuario_encontrado);
+    $usuario = mysqli_fetch_assoc($resultado); // Devuelve un arreglo asociativo con los datos del usuario
     cerrarConexion($conexion);
     return $usuario;
 }
 
 
 
-if ( (isset($_POST["btn_aceptar"])) && ($_POST["btn_aceptar"]=="Aceptar") ){
 
-    $usuario = iniciarSesion($_POST["email"], $_POST["password"]);
-    $tipo_usuario = $usuario["tipo_usuario"];
-   
-    if ( $usuario != null ){ //si el usuario existe en la base de datos
+if ((isset($_POST["btn_aceptar"])) && ($_POST["btn_aceptar"] == "Aceptar")) {
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+
+    // Obtener el usuario por email
+    $usuario = getUsuario($email);
+
+    if ($usuario != null) { // Si se encontró el usuario
+
+        $tipo_usuario = $usuario["tipo_usuario"];
+
+        // Verificar la contraseña usando password_verify
+        if (password_verify($password, $usuario["contrasena"])) {
         
-        if($tipo_usuario == "Huesped"){
-            //session_start();
-            //iniciarSesion($_POST["email"]);
-            $destino = "Location:../index.php";
-            echo "Ingresando...";
+            if ($tipo_usuario == "Huesped") {
+                $destino = "Location:../index.php";
+            } elseif ($tipo_usuario == "Administrador") {
+                $destino = "Location:../admin/admin.php";
+            }
 
-        }elseif($tipo_usuario == "Administrador"){
-            $destino = "Location:../admin/admin.php";
-            
+            guardar_variables_sesion($email, $tipo_usuario);
+
+        } else {
+            echo "Contraseña incorrecta.";
         }
-    }else{
-        echo "Usuario o contraseña incorrectos";
+    } else {
+        echo "Usuario no encontrado.";
     }
-   
 }
+
 header($destino);
 exit();
+
 
 ?>
 

@@ -60,7 +60,7 @@ function crearHabitacion($conexion, $datos){
         throw new Exception("Error en la preparación de la sentencia: " . mysqli_error($conexion));
     }
 
-    mysqli_stmt_bind_param($stmt, "ssiddi", 
+    mysqli_stmt_bind_param($stmt, "ssidis", 
         $datos['tipo'], 
         $datos['descripcion'], 
         $datos['capacidad'], 
@@ -219,42 +219,395 @@ function eliminarHabitacion($conexion, $id_habitacion){
  * @return string Nombre único de la imagen guardada.
  * @throws Exception Si ocurre un error durante la subida.
  */
-function subirImagen($archivo){
-    $directorio = __DIR__ . '/recursos/habitaciones/';
+function subirImagen($archivo) {
+    // Define el directorio de destino
+    $directorio = __DIR__ . '/Habitaciones/imagenes/';
+
+    // Verificar si el directorio existe
     if (!is_dir($directorio)) {
-        if (!mkdir($directorio, 0755, true)) {
-            throw new Exception("No se pudo crear el directorio de subidas.");
-        }
+        throw new Exception("El directorio no existe: $directorio");
     }
 
     // Verificar si hubo un error en la subida
     if ($archivo['error'] !== UPLOAD_ERR_OK) {
-        throw new Exception("Error en la subida del archivo.");
+        throw new Exception("Error al subir el archivo. Código de error: " . $archivo['error']);
     }
 
-    // Validar el tipo de archivo (permitir solo imágenes)
-    $tiposPermitidos = ['image/jpeg', 'image/png'];
-    if (!in_array($archivo['type'], $tiposPermitidos)) {
-        throw new Exception("Tipo de archivo no permitido. Solo se permiten JPEG y PNG.");
+    // Verificar si el archivo temporal existe
+    if (!file_exists($archivo['tmp_name'])) {
+        throw new Exception("El archivo temporal no existe: " . $archivo['tmp_name']);
     }
 
-    // Validar el tamaño del archivo (por ejemplo, máximo 2MB)
-    $tamanoMaximo = 2 * 1024 * 1024; // 2MB
-    if ($archivo['size'] > $tamanoMaximo) {
-        throw new Exception("El tamaño del archivo excede el límite permitido de 2MB.");
+    // Validar la extensión del archivo
+    $extensionesPermitidas = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+    $extension = strtolower(pathinfo($archivo['name'], PATHINFO_EXTENSION));
+    if (!in_array($extension, $extensionesPermitidas)) {
+        throw new Exception("Formato de archivo no permitido. Solo se permiten: " . implode(', ', $extensionesPermitidas));
     }
 
-    // Generar un nombre único para el archivo
-    $ext = pathinfo($archivo['name'], PATHINFO_EXTENSION);
-    $nombreUnico = uniqid('habitacion_', true) . '.' . $ext;
+    // Generar un nombre único para evitar colisiones
+    $nombreArchivo = uniqid('img_') . '.' . $extension;
 
-    // Mover el archivo al directorio de subidas
-    $rutaDestino = $directorio . $nombreUnico;
+    // Ruta completa de destino
+    $rutaDestino = $directorio . $nombreArchivo;
+
+    // Mover el archivo subido al directorio
     if (!move_uploaded_file($archivo['tmp_name'], $rutaDestino)) {
-        throw new Exception("No se pudo mover el archivo subido.");
+        throw new Exception("No se pudo mover el archivo al directorio destino: $rutaDestino");
     }
 
-    return $nombreUnico;
+    // Retornar el nombre del archivo (sin la ruta completa)
+    return $nombreArchivo;
 }
+
+
+/**
+ * Crea un nuevo usuario en la base de datos.
+ *
+ * @param mysqli $conexion La conexión a la base de datos.
+ * @param array $datos Asociativo con los datos del usuario.
+ * @return bool Verdadero si se creó correctamente, falso de lo contrario.
+ * @throws Exception Si ocurre un error en la consulta.
+ */
+function crearUsuario($conexion, $datos){
+    $stmt = mysqli_prepare($conexion, "INSERT INTO usuarios (nombre_usuario, contrasena, tipo_usuario, nombre_completo, email) VALUES (?, ?, ?, ?, ?)");
+    if (!$stmt) {
+        throw new Exception("Error en la preparación de la sentencia: " . mysqli_error($conexion));
+    }
+
+    
+
+    mysqli_stmt_bind_param($stmt, "sssss", 
+        $datos['nombre_usuario'], 
+        $datos['contrasena'], 
+        $datos['tipo_usuario'], 
+        $datos['nombre_completo'], 
+        $datos['email']
+    );
+
+    if (!mysqli_stmt_execute($stmt)) {
+        throw new Exception("Error en la ejecución de la sentencia: " . mysqli_stmt_error($stmt));
+    }
+
+    $exito = mysqli_stmt_affected_rows($stmt) > 0;
+
+    mysqli_stmt_close($stmt);
+
+    return $exito;
+}
+
+/**
+ * Obtiene todos los usuarios de la base de datos.
+ *
+ * @param mysqli $conexion La conexión a la base de datos.
+ * @return array Array de usuarios.
+ * @throws Exception Si ocurre un error en la consulta.
+ */
+function listarUsuarios($conexion){
+    $query = "SELECT id_usuario, nombre_usuario, tipo_usuario, nombre_completo, email, fecha_registro FROM usuarios";
+    $resultado = mysqli_query($conexion, $query);
+
+    if (!$resultado) {
+        throw new Exception("Error al listar usuarios: " . mysqli_error($conexion));
+    }
+
+    $usuarios = [];
+    while ($fila = mysqli_fetch_assoc($resultado)) {
+        $usuarios[] = $fila;
+    }
+
+    mysqli_free_result($resultado);
+    return $usuarios;
+}
+
+/**
+ * Obtiene un usuario específico por su ID.
+ *
+ * @param mysqli $conexion La conexión a la base de datos.
+ * @param int $id_usuario ID del usuario.
+ * @return array|null El usuario como array asociativo o null si no se encuentra.
+ * @throws Exception Si ocurre un error en la consulta.
+ */
+function obtenerUsuario($conexion, $id_usuario){
+    $stmt = mysqli_prepare($conexion, "SELECT id_usuario, nombre_usuario, tipo_usuario, nombre_completo, email, fecha_registro FROM usuarios WHERE id_usuario = ?");
+    if (!$stmt) {
+        throw new Exception("Error en la preparación de la sentencia: " . mysqli_error($conexion));
+    }
+
+    mysqli_stmt_bind_param($stmt, "i", $id_usuario);
+
+    if (!mysqli_stmt_execute($stmt)) {
+        throw new Exception("Error en la ejecución de la sentencia: " . mysqli_stmt_error($stmt));
+    }
+
+    $resultado = mysqli_stmt_get_result($stmt);
+    $usuario = mysqli_fetch_assoc($resultado);
+
+    mysqli_stmt_close($stmt);
+
+    return $usuario ? $usuario : null;
+}
+
+/**
+ * Actualiza un usuario en la base de datos.
+ *
+ * @param mysqli $conexion La conexión a la base de datos.
+ * @param int $id_usuario ID del usuario a actualizar.
+ * @param array $datos Asociativo con los datos actualizados.
+ *                     Si 'contrasena' está vacío, no se actualiza.
+ * @return bool Verdadero si se actualizó correctamente, falso de lo contrario.
+ * @throws Exception Si ocurre un error en la consulta.
+ */
+function editarUsuario($conexion, $id_usuario, $datos){
+    if (!empty($datos['contrasena'])) {
+        // Si se actualiza la contraseña
+        $stmt = mysqli_prepare($conexion, "UPDATE usuarios SET nombre_usuario = ?, contrasena = ?, tipo_usuario = ?, nombre_completo = ?, email = ? WHERE id_usuario = ?");
+        if (!$stmt) {
+            throw new Exception("Error en la preparación de la sentencia: " . mysqli_error($conexion));
+        }
+
+        
+
+        mysqli_stmt_bind_param($stmt, "sssssi", 
+            $datos['nombre_usuario'], 
+            $datos['contrasena'], 
+            $datos['tipo_usuario'], 
+            $datos['nombre_completo'], 
+            $datos['email'],
+            $id_usuario
+        );
+    } else {
+        // Si no se actualiza la contraseña
+        $stmt = mysqli_prepare($conexion, "UPDATE usuarios SET nombre_usuario = ?, tipo_usuario = ?, nombre_completo = ?, email = ? WHERE id_usuario = ?");
+        if (!$stmt) {
+            throw new Exception("Error en la preparación de la sentencia: " . mysqli_error($conexion));
+        }
+
+        mysqli_stmt_bind_param($stmt, "ssssi", 
+            $datos['nombre_usuario'], 
+            $datos['tipo_usuario'], 
+            $datos['nombre_completo'], 
+            $datos['email'],
+            $id_usuario
+        );
+    }
+
+    if (!mysqli_stmt_execute($stmt)) {
+        throw new Exception("Error en la ejecución de la sentencia: " . mysqli_stmt_error($stmt));
+    }
+
+    $exito = mysqli_stmt_affected_rows($stmt) > 0;
+
+    mysqli_stmt_close($stmt);
+
+    return $exito;
+}
+
+/**
+ * Elimina un usuario de la base de datos.
+ *
+ * @param mysqli $conexion La conexión a la base de datos.
+ * @param int $id_usuario ID del usuario a eliminar.
+ * @return bool Verdadero si se eliminó correctamente, falso de lo contrario.
+ * @throws Exception Si ocurre un error en la consulta.
+ */
+function eliminarUsuario($conexion, $id_usuario){
+    $stmt = mysqli_prepare($conexion, "DELETE FROM usuarios WHERE id_usuario = ?");
+    if (!$stmt) {
+        throw new Exception("Error en la preparación de la sentencia: " . mysqli_error($conexion));
+    }
+
+    mysqli_stmt_bind_param($stmt, "i", $id_usuario);
+
+    if (!mysqli_stmt_execute($stmt)) {
+        throw new Exception("Error en la ejecución de la sentencia: " . mysqli_stmt_error($stmt));
+    }
+
+    $exito = mysqli_stmt_affected_rows($stmt) > 0;
+
+    mysqli_stmt_close($stmt);
+
+    return $exito;
+}
+
+/**
+ * Validar el tipo de usuario.
+ *
+ * @param string $tipo_usuario Tipo de usuario a validar.
+ * @return bool Verdadero si es válido, falso de lo contrario.
+ */
+function validarTipoUsuario($tipo_usuario){
+    $tiposPermitidos = ['Administrador', 'Huesped'];
+    return in_array($tipo_usuario, $tiposPermitidos);
+}
+
+/**
+ * Busca habitaciones según tipo y/o palabras clave en la descripción.
+ *
+ * @param mysqli $conexion La conexión a la base de datos.
+ * @param string $tipo El tipo de habitación para filtrar (puede estar vacío).
+ * @param string $keywords Las palabras clave para la búsqueda en tipo y descripción.
+ * @return array Array de habitaciones que coinciden con la búsqueda.
+ * @throws Exception Si ocurre un error en la consulta.
+ */
+function buscarHabitaciones($conexion, $tipo = '', $keywords = ''){
+    // Construir la consulta base
+    $consulta = "SELECT * FROM habitaciones WHERE 1=1";
+    $params = [];
+    
+    // Añadir condiciones según los parámetros proporcionados
+    if (!empty($tipo)) {
+        $consulta .= " AND tipo = ?";
+        $params[] = $tipo;
+    }
+    
+    if (!empty($keywords)) {
+        $consulta .= " AND (tipo LIKE ? OR descripcion LIKE ?)";
+        $likeKeywords = '%' . $keywords . '%';
+        $params[] = $likeKeywords;
+        $params[] = $likeKeywords;
+    }
+    
+    // Preparar la sentencia
+    $stmt = mysqli_prepare($conexion, $consulta);
+    if (!$stmt) {
+        throw new Exception("Error en la preparación de la sentencia: " . mysqli_error($conexion));
+    }
+
+    // Vincular los parámetros si existen
+    if (!empty($params)) {
+        // Crear una cadena de tipos para los parámetros
+        $types = str_repeat('s', count($params));
+        mysqli_stmt_bind_param($stmt, $types, ...$params);
+    }
+
+    // Ejecutar la sentencia
+    if (!mysqli_stmt_execute($stmt)) {
+        throw new Exception("Error en la ejecución de la sentencia: " . mysqli_stmt_error($stmt));
+    }
+
+    // Obtener el resultado
+    $resultado = mysqli_stmt_get_result($stmt);
+    $habitaciones = [];
+    while ($fila = mysqli_fetch_assoc($resultado)) {
+        $habitaciones[] = $fila;
+    }
+
+    mysqli_stmt_close($stmt);
+    return $habitaciones;
+}
+
+// -------------- Nuevas Funciones para Reservaciones ---------------
+
+/**
+ * Crea una nueva reservación en la base de datos.
+ *
+ * @param mysqli $conexion La conexión a la base de datos.
+ * @param array $datos Asociativo con los datos de la reservación.
+ *                     Debe contener 'id_usuario', 'fecha_entrada', 'fecha_salida', 'total'.
+ * @return int ID de la reservación creada.
+ * @throws Exception Si ocurre un error en la consulta.
+ */
+function crearReservacion($conexion, $datos){
+    $stmt = mysqli_prepare($conexion, "INSERT INTO reservaciones (id_usuario, fecha_entrada, fecha_salida, estado, total) VALUES (?, ?, ?, 'Confirmada', ?)");
+    if (!$stmt) {
+        throw new Exception("Error en la preparación de la sentencia: " . mysqli_error($conexion));
+    }
+
+    mysqli_stmt_bind_param($stmt, "issi", 
+        $datos['id_usuario'], 
+        $datos['fecha_entrada'], 
+        $datos['fecha_salida'], 
+        $datos['total']
+    );
+
+    if (!mysqli_stmt_execute($stmt)) {
+        throw new Exception("Error en la ejecución de la sentencia: " . mysqli_stmt_error($stmt));
+    }
+
+    $id_reservacion = mysqli_insert_id($conexion);
+
+    mysqli_stmt_close($stmt);
+
+    return $id_reservacion;
+}
+
+/**
+ * Crea un detalle de reservación en la base de datos.
+ *
+ * @param mysqli $conexion La conexión a la base de datos.
+ * @param array $datos Asociativo con los datos del detalle de la reservación.
+ *                     Debe contener 'id_reservacion', 'id_habitacion', 'cantidad', 'subtotal'.
+ * @return bool Verdadero si se insertó correctamente, falso de lo contrario.
+ * @throws Exception Si ocurre un error en la consulta.
+ */
+function crearDetalleReservacion($conexion, $datos){
+    $stmt = mysqli_prepare($conexion, "INSERT INTO detalle_reservacion (id_reservacion, id_habitacion, cantidad, subtotal) VALUES (?, ?, ?, ?)");
+    if (!$stmt) {
+        throw new Exception("Error en la preparación de la sentencia: " . mysqli_error($conexion));
+    }
+
+    mysqli_stmt_bind_param($stmt, "iiid", 
+        $datos['id_reservacion'], 
+        $datos['id_habitacion'], 
+        $datos['cantidad'], 
+        $datos['subtotal']
+    );
+
+    if (!mysqli_stmt_execute($stmt)) {
+        throw new Exception("Error en la ejecución de la sentencia: " . mysqli_stmt_error($stmt));
+    }
+
+    $exito = mysqli_stmt_affected_rows($stmt) > 0;
+
+    mysqli_stmt_close($stmt);
+
+    return $exito;
+}
+
+/**
+ * Actualiza la cantidad de habitaciones disponibles.
+ *
+ * @param mysqli $conexion La conexión a la base de datos.
+ * @param int $id_habitacion ID de la habitación.
+ * @param int $cantidad Cantidad a restar de las disponibles.
+ * @return bool Verdadero si se actualizó correctamente, falso de lo contrario.
+ * @throws Exception Si ocurre un error en la consulta.
+ */
+function actualizarDisponiblesHabitacion($conexion, $id_habitacion, $cantidad){
+    $stmt = mysqli_prepare($conexion, "UPDATE habitaciones SET disponibles = disponibles - ? WHERE id_habitacion = ? AND disponibles >= ?");
+    if (!$stmt) {
+        throw new Exception("Error en la preparación de la sentencia: " . mysqli_error($conexion));
+    }
+
+    mysqli_stmt_bind_param($stmt, "iii", 
+        $cantidad, 
+        $id_habitacion, 
+        $cantidad
+    );
+
+    if (!mysqli_stmt_execute($stmt)) {
+        throw new Exception("Error en la ejecución de la sentencia: " . mysqli_stmt_error($stmt));
+    }
+
+    $exito = mysqli_stmt_affected_rows($stmt) > 0;
+
+    mysqli_stmt_close($stmt);
+
+    return $exito;
+}
+
+/**
+ * Obtiene los detalles de una habitación específica.
+ *
+ * @param mysqli $conexion La conexión a la base de datos.
+ * @param int $id_habitacion ID de la habitación.
+ * @return array|null La habitación como array asociativo o null si no se encuentra.
+ * @throws Exception Si ocurre un error en la consulta.
+ */
+function obtenerHabitacionDetalle($conexion, $id_habitacion){
+    return obtenerHabitacion($conexion, $id_habitacion);
+}
+
 
 ?>

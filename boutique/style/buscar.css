@@ -1,0 +1,46 @@
+.habitaciones-navegacion {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.habitacion {
+    display: block;
+    opacity: 1; /* Garantiza que sea visible */
+    visibility: visible;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 300px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.habitacion img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.habitacion:hover {
+    transform: scale(1.05);
+}
+
+.habitacion-info {
+    padding: 15px;
+    text-align: center;
+}
+
+.descripcion {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.precio {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 15px;
+}

@@ -159,7 +159,7 @@ function finalizarCompra() {
     var carrito = obtenerCarrito();
 
     // Simular la finalización de la compra
-    alert('Compra realizada con éxito.');
+    //alert('Compra realizada con éxito.');
 
     // Limpiar el carrito
     deleteCookie('carrito');

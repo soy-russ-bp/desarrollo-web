@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chilangolandia</title>
+    <title>Registro</title>
     <link rel="stylesheet" href="CSS/styles.css">
 </head>
 <body>
     <section class="background" style="background-image: url('imagenes/imagen-registro.jpg');">
         <div class="form-container">
             <h2>Registrarse</h2>
-            <form action="#" method="POST">
+            <form method="POST" action="registro_usuarios.php" >
                 <label for="nombre">Nombre:</label>
                 <input type="text" id="nombre" name="nombre" required>
 
@@ -25,6 +25,8 @@
 
                 <button type="submit">Registrarse</button>
                 <a href="ingreso.php" class="link">Ya tengo una cuenta</a>
+
+                <a href="../index.php" class="link">Volver al inicio</a>
             </form>
         </div>
 

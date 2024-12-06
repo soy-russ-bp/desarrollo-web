@@ -1,6 +1,6 @@
 .habitacion-contenedor {
-    width: 50vw; /* Ajusta el ancho según el diseño */
-    height: 50vh; /* Ajusta la altura según el diseño */
+    width: 45vw; /* Ajusta el ancho según el diseño */
+    height: 60vh; /* Ajusta la altura según el diseño */
     overflow: hidden;
     position: relative; /* Necesario para animar elementos hijos en posición absoluta */
     border: 1px solid #ddd;
@@ -53,8 +53,8 @@
 /* Imagen de la habitación */
 .habitacion img {
     width: 100%;
-    height: 60%;
-    object-fit: cover;
+    height: 50%;
+    object-fit:fill;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
 }
@@ -84,6 +84,7 @@
 
 /* Botón de reservar */
 .btn-reservar {
+    
     padding: 8px 16px;
     background-color: #007BFF;
     color: #fff;

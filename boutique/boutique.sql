@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-11-2024 a las 02:03:43
+-- Tiempo de generación: 29-11-2024 a las 09:24:18
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -58,7 +58,7 @@ CREATE TABLE `detalle_reservacion` (
 
 CREATE TABLE `habitaciones` (
   `id_habitacion` int(11) NOT NULL,
-  `tipo` varchar(50) NOT NULL,
+  `tipo` enum('Sencilla','Doble','Deluxe','Ejecutiva','Presidencial') NOT NULL,
   `descripcion` text DEFAULT NULL,
   `capacidad` int(11) NOT NULL CHECK (`capacidad` > 0),
   `precio` decimal(10,2) NOT NULL CHECK (`precio` >= 0),
@@ -71,9 +71,11 @@ CREATE TABLE `habitaciones` (
 --
 
 INSERT INTO `habitaciones` (`id_habitacion`, `tipo`, `descripcion`, `capacidad`, `precio`, `disponibles`, `imagen`) VALUES
-(1, 'sencilla', 'Una habitacion sencilla con una cama, un baño y servicio a la habitacion (si encuenta un insecto la comida es gratis!!!).', 1, 500.00, 3, 'ruta/de/la/imagen/habitacion_0001.png'),
-(2, 'Doble', 'Como la sencilla pero con el doble de risas...\r\nAdmitelo, estas solo no necesitas la doble a menos de que te sobre el dinero...', 2, 1000.00, 4, 'ruta/de/la/imagen/habitacion_0002.png'),
-(3, 'Deluxe', 'La nueva hiper requete contra omega ninja super deluxe edition of the year del año 2024 habitacion, es la habitacion de tus sueños, lleva la comodidad a otro nivel con la cama ultra suave de plumas de dodo y caviar bajo la almohada. \r\n', 1, 10000.00, 1, 'ruta/de/la/imagen/habitacion_0003.png');
+(1, 'Sencilla', 'Una habitacion sencilla con una cama, un baño y servicio a la habitación.', 1, 500.00, 5, 'Sencilla.webp'),
+(2, 'Doble', 'Como la sencilla pero con el doble de risas...\r\nAdmitelo, estas solo no necesitas la doble a menos de que te sobre el dinero...', 2, 1000.00, 4, 'Doble.webp'),
+(3, 'Deluxe', 'La nueva hiper requete contra omega ninja super deluxe edition of the year del año 2024 habitacion, es la habitacion de tus sueños, lleva la comodidad a otro nivel con la cama ultra suave de plumas de dodo y caviar bajo la almohada. \r\n', 2, 10000.00, 3, 'Deluxe.webp'),
+(5, 'Ejecutiva', 'Habitación Ejecutiva para los hombres de negocio que necesitan una escapada de la sociedad y una excusa para gastar dinero.', 2, 50000.00, 2, 'img_674963b06e3ee.webp'),
+(6, 'Presidencial', 'Buenas tardes señora presidenta, el dia de hoy le ofresco esta humilde habitación ya hay que ser austeros, pero no por eso, esta habitación cuenta con lo ulitmo de lo ultimo en autos, moda y rock and roll', 1, 99999999.99, 1, 'img_674963193cc1b.webp');
 
 -- --------------------------------------------------------
 
@@ -89,7 +91,7 @@ CREATE TABLE `reservaciones` (
   `fecha_salida` date NOT NULL,
   `estado` enum('Pendiente','Confirmada','Cancelada') DEFAULT 'Pendiente',
   `total` decimal(10,2) NOT NULL CHECK (`total` >= 0)
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -110,24 +112,22 @@ CREATE TABLE `sesiones` (
 -- Estructura de tabla para la tabla `usuarios`
 --
 
-CREATE TABLE `usuarios` (
-  `id_usuario` int(11) NOT NULL,
-  `nombre_usuario` varchar(50) NOT NULL,
-  `contrasena` varchar(255) NOT NULL,
-  `tipo_usuario` enum('Administrador','Huesped') NOT NULL,
-  `nombre_completo` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `fecha_registro` datetime DEFAULT current_timestamp()
-) ;
+CREATE TABLE usuarios (
+  id_usuario int(11) NOT NULL,
+  nombre_usuario varchar(50) NOT NULL,
+  contrasena varchar(255) NOT NULL,
+  tipo_usuario enum('Administrador','Huesped') NOT NULL,
+  email varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `usuarios`
+-- Volcado de datos para la tabla usuarios
 --
 
-INSERT INTO `usuarios` (`id_usuario`, `nombre_usuario`, `contrasena`, `tipo_usuario`, `nombre_completo`, `email`, `fecha_registro`) VALUES
-(1, 'admin', 'admin', 'Administrador', 'Administrador', 'admin@example.com', '2024-11-23 18:37:11'),
-(2, 'user', 'user', 'Huesped', 'Huesped', 'user@example.com', '2024-11-23 18:37:24');
-
+INSERT INTO usuarios (id_usuario, nombre_usuario, contrasena, tipo_usuario, email) VALUES
+(3, 'russ', '$2y$10$bfZHTQlBn33anzjO/tLriOCjnOtBPYWVz7mcm0hVG9vlkG8fLjYJm', 'Huesped', 'russ@gmail.com'),
+(4, 'admin', '$2y$10$hkGcKIKzpSTsrfvSrICcNeBH9mq1gYYISCisFEI91TQunwy3OUHHO', 'Administrador', 'admin@example.com'),
+(5, 'user', '$2y$10$lTp9gthalL/Nwa.25tC5Z.McAc4J7GlWcBiSsjidneJqxJdmSsEei', 'Huesped', 'user@example.com');
 --
 -- Índices para tablas volcadas
 --
@@ -198,7 +198,7 @@ ALTER TABLE `detalle_reservacion`
 -- AUTO_INCREMENT de la tabla `habitaciones`
 --
 ALTER TABLE `habitaciones`
-  MODIFY `id_habitacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_habitacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `reservaciones`
@@ -216,7 +216,7 @@ ALTER TABLE `sesiones`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas

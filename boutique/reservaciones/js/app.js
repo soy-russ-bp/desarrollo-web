@@ -48,7 +48,7 @@ function mostrarProductos() {
     // Añadir eventos a los botones de agregar al carrito
     var botonesAgregar = document.querySelectorAll('.agregar-carrito');
     botonesAgregar.forEach(boton => {
-        boton.addEventListener('click', function() {
+        boton.addEventListener('click', function () {
             var idProducto = this.getAttribute('data-id');
             var cantidadInput = document.getElementById(`cantidad-${idProducto}`);
             var cantidad = parseInt(cantidadInput.value);
@@ -70,7 +70,7 @@ function mostrarProductos() {
     // Añadir eventos a los botones de ver detalles
     var botonesDetalles = document.querySelectorAll('.ver-detalles');
     botonesDetalles.forEach(boton => {
-        boton.addEventListener('click', function() {
+        boton.addEventListener('click', function () {
             var idProducto = this.getAttribute('data-id');
             mostrarDetallesProducto(idProducto);
         });
@@ -104,8 +104,66 @@ function abrirVentanaEmergente(contenido) {
     document.body.appendChild(overlay);
 
     // Añadir evento para cerrar la ventana
-    document.getElementById('cerrar-ventana').addEventListener('click', function() {
+    document.getElementById('cerrar-ventana').addEventListener('click', function () {
         document.body.removeChild(overlay);
     });
 }
+const finalizarCompraBtn = document.getElementById('finalizar-compra');
+const carritoSection = document.getElementById('carrito');
+const pagoSection = document.getElementById('pago');
 
+finalizarCompraBtn.addEventListener('click', () => {
+    // Ocultar la sección del carrito
+    carritoSection.style.display = 'none';
+
+    // Mostrar la sección de pago
+    pagoSection.style.display = 'block';
+
+    // Desplazarse suavemente a la sección de pago
+    pagoSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+const form = document.getElementById('paymentForm');
+const message = document.getElementById('message');
+const cardInputs = document.querySelectorAll('.card-input');
+
+cardInputs.forEach((input, index) => {
+    input.addEventListener('input', (e) => {
+        if (e.target.value.length === 4 && index < cardInputs.length - 1) {
+            cardInputs[index + 1].focus();
+        }
+    });
+});
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const cardNumber = Array.from(cardInputs).map(input => input.value.trim()).join('');
+    const expireDate = document.getElementById('expiraDate').value.trim();
+    const cvv = document.getElementById('cvv').value.trim();
+
+    if (cardNumber.length !== 16 || isNaN(cardNumber)) {
+        message.textContent = 'Error: El número de tarjeta debe tener 16 dígitos.';
+        message.className = 'message error';
+        return;
+    }
+
+    if (expireDate.length !== 4 || isNaN(expireDate)) {
+        message.textContent = 'Error: La fecha de vencimiento debe tener exactamente 4 dígitos (MMYY).';
+        message.className = 'message error';
+        return;
+    }
+
+    if (cvv.length !== 3 || isNaN(cvv)) {
+        message.textContent = 'Error: El CVV debe tener exactamente 3 dígitos.';
+        message.className = 'message error';
+        return;
+    }
+
+    message.textContent = 'Pago exitoso';
+    message.className = 'message success';
+
+    setTimeout(function () {
+        window.location.href = "carrito.php";
+    }, 3000);
+});

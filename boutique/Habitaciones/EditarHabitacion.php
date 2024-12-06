@@ -1,14 +1,19 @@
 <?php
+// operaciones/editarHabitacion.php
 
+require_once '../GestorBaseDatos.php';
 
-require_once 'proyectoWeb\GestorBaseDatos.php';
-require_once 'proyectoWeb\config.inc.php';
 
 try {
+    // Verificar si el formulario fue enviado mediante POST
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        throw new Exception("Método de solicitud no permitido.");
+    }
 
     // Abrir conexión a la base de datos
     $conexion = abrirConexion();
 
+    // Obtener y sanitizar datos del formulario
     $id_habitacion = $_POST['id_habitacion'];
     $tipo = $_POST['tipo'];
     $descripcion = $_POST['descripcion'];
@@ -16,32 +21,28 @@ try {
     $precio = $_POST['precio'];
     $disponibles = $_POST['disponibles'];
 
-    // Validar datos
-    if ($id_habitacion <= 0 || empty($tipo) || empty($descripcion) || $capacidad <= 0 || $precio <= 0 || $disponibles < 0) {
-        throw new Exception("Todos los campos son obligatorios y deben contener valores válidos.");
-    }
-
     // Obtener la habitación actual para manejar la imagen existente
     $habitacionActual = obtenerHabitacion($conexion, $id_habitacion);
     if (!$habitacionActual) {
         throw new Exception("La habitación especificada no existe.");
     }
 
+
     // Manejar la subida de una nueva imagen si se proporcionó
-    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] !== UPLOAD_ERR_NO_FILE) {
+    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
         // Subir la nueva imagen
         $imagen = subirImagen($_FILES['imagen']);
-
+    
         // Eliminar la imagen anterior si existe
-        if ($habitacionActual['imagen']) {
-            $rutaImagenAnterior = __DIR__ . '/../uploads/habitaciones/' . $habitacionActual['imagen'];
+        if (!empty($habitacionActual['imagen'])) {
+            $rutaImagenAnterior = __DIR__ . '/../Habitaciones/imagenes/' . $habitacionActual['imagen'];
             if (file_exists($rutaImagenAnterior)) {
                 unlink($rutaImagenAnterior);
             }
         }
     } else {
-        // No se actualiza la imagen, mantener la existente
-        $imagen = null;
+        // Mantener la imagen existente si no se sube una nueva
+        $imagen = $habitacionActual['imagen'];
     }
 
     // Preparar los datos para actualizar
@@ -51,21 +52,26 @@ try {
         'capacidad' => $capacidad,
         'precio' => $precio,
         'disponibles' => $disponibles,
-        'imagen' => $imagen 
+        'imagen' => $imagen // Puede ser null si no se actualiza la imagen
     ];
 
     // Actualizar la habitación
     if (editarHabitacion($conexion, $id_habitacion, $datos)) {
-        echo "Habitación actualizada exitosamente.";
+        // Redirigir al listado con mensaje de éxito
+        header("Location: ../admin/admin.php?mensaje=Habitación actualizada exitosamente");
+        cerrarConexion($conexion);
+        exit;
     } else {
-        echo "No se pudo actualizar la habitación o no hubo cambios.";
+        cerrarConexion($conexion);
+        throw new Exception("No se pudo actualizar la habitación o no hubo cambios.");
     }
 
     // Cerrar conexión
-    cerrarConexion($conexion);
+
 } catch (Exception $e) {
-    // Registrar el error y mostrar un mensaje genérico
+    // Registrar el error y redirigir con mensaje de error
     error_log($e->getMessage());
-    echo "Ocurrió un error al editar la habitación. Por favor, intenta nuevamente más tarde.";
+    header("Location: ../admin/formularioEditarHabitacion.php?id=" . urlencode($id_habitacion) . "&error=Ocurrió un error al editar la habitación");
+    exit;
 }
 ?>
